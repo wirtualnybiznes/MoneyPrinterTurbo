@@ -1,19 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>MoneyPrinterTurbo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MoneyPrinter Autopilot — faceless video channels that run themselves</title>
+<meta name="description" content="Define a channel once: niche, voice, schedule. Autopilot invents fresh topics, scripts them with AI, builds the videos and posts them to TikTok & Instagram — hands-off.">
+<style>
+  :root{
+    --bg:#0b0e14; --panel:#121826; --text:#e6e9f0; --muted:#9aa3b5;
+    --accent:#22d3a5; --accent2:#6c8cff; --border:#232b3d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       background:var(--bg);color:var(--text);line-height:1.6}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+  header{padding:18px 0;border-bottom:1px solid var(--border)}
+  header .wrap{display:flex;align-items:center;justify-content:space-between}
+  .logo{font-weight:700;font-size:18px}
+  .logo span{color:var(--accent)}
+  nav a{color:var(--muted);text-decoration:none;margin-left:22px;font-size:14px}
+  nav a:hover{color:var(--text)}
+  .hero{padding:84px 0 60px;text-align:center}
+  .hero h1{font-size:46px;line-height:1.15;letter-spacing:-.5px}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero p.sub{margin:22px auto 0;max-width:640px;color:var(--muted);font-size:19px}
+  .cta{margin-top:36px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-block;padding:13px 26px;border-radius:10px;font-weight:600;
+       text-decoration:none;font-size:16px}
+  .btn.primary{background:var(--accent);color:#06231b}
+  .btn.ghost{border:1px solid var(--border);color:var(--text)}
+  .btn:hover{filter:brightness(1.08)}
+  .pipeline{margin:64px auto 0;padding:22px;background:var(--panel);border:1px solid var(--border);
+            border-radius:14px;max-width:860px;display:flex;justify-content:space-between;
+            flex-wrap:wrap;gap:10px}
+  .step{flex:1;min-width:140px;text-align:center;padding:8px}
+  .step b{display:block;font-size:15px}
+  .step small{color:var(--muted)}
+  .step .n{display:inline-flex;width:28px;height:28px;border-radius:50%;background:var(--accent2);
+           color:#fff;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-bottom:8px}
+  section{padding:64px 0;border-top:1px solid var(--border)}
+  h2{font-size:30px;text-align:center;margin-bottom:40px;letter-spacing:-.3px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:24px}
+  .card h3{font-size:17px;margin-bottom:8px}
+  .card p{color:var(--muted);font-size:15px}
+  .price .tier{text-align:center}
+  .price .amount{font-size:38px;font-weight:700;margin:10px 0 2px}
+  .price .amount small{font-size:15px;color:var(--muted);font-weight:400}
+  .price ul{list-style:none;margin:16px 0 22px;color:var(--muted);font-size:14.5px}
+  .price li{padding:4px 0}
+  .price .tier.featured{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+  .tag{display:inline-block;font-size:12px;font-weight:700;color:#06231b;background:var(--accent);
+       border-radius:999px;padding:2px 10px;margin-bottom:8px}
+  footer{padding:40px 0;border-top:1px solid var(--border);color:var(--muted);font-size:13.5px;text-align:center}
+  footer a{color:var(--muted)}
+  .fineprint{max-width:760px;margin:14px auto 0}
+  @media(max-width:640px){.hero h1{font-size:32px}}
+</style>
 </head>
 <body>
-<h1>MoneyPrinterTurbo</h1>
-<a href="https://github.com/harry0703/MoneyPrinterTurbo">https://github.com/harry0703/MoneyPrinterTurbo</a>
-<p>
-    只需提供一个视频 主题 或 关键词 ，就可以全自动生成视频文案、视频素材、视频字幕、视频背景音乐，然后合成一个高清的短视频。
-</p>
 
-<p>
-    Simply provide a topic or keyword for a video, and it will automatically generate the video copy, video materials,
-    video subtitles, and video background music before synthesizing a high-definition short video.
-</p>
+<header>
+  <div class="wrap">
+    <div class="logo">MoneyPrinter <span>Autopilot</span></div>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="/docs">API</a>
+      <a href="https://github.com/harry0703/MoneyPrinterTurbo">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>Faceless video channels<br>that <em>run themselves</em></h1>
+    <p class="sub">Describe your channel in one sentence. Autopilot invents a fresh topic every day,
+       writes the script, builds the video — voiceover, subtitles, music, licensed footage —
+       and posts it to TikTok &amp; Instagram. You check the analytics. It does everything else.</p>
+    <div class="cta">
+      <a class="btn primary" href="/docs#/default/create_channel_api_v1_autopilot_channels_post">Create your first channel</a>
+      <a class="btn ghost" href="https://github.com/harry0703/MoneyPrinterTurbo">Self-host free (open source)</a>
+    </div>
+
+    <div class="pipeline" id="how">
+      <div class="step"><span class="n">1</span><b>Fresh topic</b><small>AI picks it daily, never repeats</small></div>
+      <div class="step"><span class="n">2</span><b>Script &amp; voice</b><small>40+ natural voices, any language</small></div>
+      <div class="step"><span class="n">3</span><b>Auto-edit</b><small>footage, subtitles, music</small></div>
+      <div class="step"><span class="n">4</span><b>Auto-publish</b><small>TikTok &amp; Instagram, on schedule</small></div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2>Built for consistency — the thing algorithms reward</h2>
+    <div class="grid">
+      <div class="card"><h3>🧠 Topic engine with memory</h3>
+        <p>Every channel remembers what it already covered and steers the AI toward new angles,
+           so your feed never feels copy-pasted.</p></div>
+      <div class="card"><h3>📅 Set &amp; forget scheduling</h3>
+        <p>From one video a week to three a day. Channels persist across restarts and
+           keep producing until you say stop.</p></div>
+      <div class="card"><h3>🎛 Your style, locked in</h3>
+        <p>Pin the voice, aspect ratio, subtitle look and music per channel so every post
+           feels like the same creator made it.</p></div>
+      <div class="card"><h3>✅ Approval mode</h3>
+        <p>Want a human in the loop? Disable auto-publish per channel and review each video
+           before it goes live.</p></div>
+      <div class="card"><h3>🔌 API-first</h3>
+        <p>Everything on this page is a REST call. Wire it into your own dashboards,
+           agents or client workflows.</p></div>
+      <div class="card"><h3>🔓 Open-source core</h3>
+        <p>Built on MoneyPrinterTurbo (37k+ GitHub stars). Self-host the whole thing for free —
+           no lock-in, export everything.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <h2>Pricing</h2>
+    <div class="grid price">
+      <div class="card tier">
+        <h3>Starter</h3>
+        <div class="amount">$19<small>/mo</small></div>
+        <ul>
+          <li>1 autopilot channel</li>
+          <li>30 videos / month</li>
+          <li>Auto-publish to TikTok &amp; IG</li>
+          <li>Watermark on videos</li>
+        </ul>
+        <a class="btn ghost" href="/docs">Get started</a>
+      </div>
+      <div class="card tier featured">
+        <span class="tag">MOST POPULAR</span>
+        <h3>Creator</h3>
+        <div class="amount">$49<small>/mo</small></div>
+        <ul>
+          <li>5 autopilot channels</li>
+          <li>150 videos / month</li>
+          <li>No watermark</li>
+          <li>Approval mode &amp; analytics</li>
+        </ul>
+        <a class="btn primary" href="/docs">Get started</a>
+      </div>
+      <div class="card tier">
+        <h3>Agency</h3>
+        <div class="amount">$149<small>/mo</small></div>
+        <ul>
+          <li>25 channels, white-label</li>
+          <li>Unlimited team seats</li>
+          <li>Full API access</li>
+          <li>Priority support</li>
+        </ul>
+        <a class="btn ghost" href="/docs">Talk to us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>MoneyPrinter Autopilot — built on the open-source
+      <a href="https://github.com/harry0703/MoneyPrinterTurbo">MoneyPrinterTurbo</a> engine.</div>
+    <p class="fineprint">Autopilot automates content production and publishing. It does not and cannot
+       guarantee views, followers or income — results depend on your niche, consistency and platform
+       algorithms. You are responsible for complying with each platform's terms of service and for
+       disclosing AI-generated content where required.</p>
+  </div>
+</footer>
+
 </body>
 </html>
