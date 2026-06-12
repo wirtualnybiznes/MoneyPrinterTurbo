@@ -96,8 +96,10 @@ details and legal decisions only the owner can make:
       like Paddle/LemonSqueezy for global VAT).
 - [ ] Hosted infrastructure (a $40–80/mo GPU-less VPS handles early scale;
       generation is CPU-bound via MoviePy).
-- [ ] Auth + billing layer in front of the API (Stripe Checkout +
-      API-key-per-user is enough for v1).
+- [x] Billing layer — **built in**: the `/billing` API creates Stripe
+      Checkout sessions, issues license keys via webhook on successful
+      payment and enforces per-plan channel limits. Just paste your Stripe
+      keys and price IDs into the `[stripe]` section of `config.toml`.
 - [ ] Upload-Post (or direct platform API) production credentials.
 - [ ] Product Hunt / marketplace accounts (copy is ready in
       `docs/store-listing.md`).

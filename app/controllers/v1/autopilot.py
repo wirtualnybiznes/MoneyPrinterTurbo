@@ -1,4 +1,4 @@
-from fastapi import Path, Request
+from fastapi import Header, Path, Request
 from loguru import logger
 
 from app.config import config
@@ -14,6 +14,7 @@ from app.models.autopilot import (
     ChannelUpdateRequest,
 )
 from app.models.exception import HttpException
+from app.services import billing
 from app.services import task as tm
 from app.services.autopilot import AutopilotScheduler
 from app.utils import utils
@@ -36,7 +37,24 @@ if config.app.get("autopilot_enabled", False):
     response_model=ChannelResponse,
     summary="Create an autopilot channel (scheduled hands-off video production)",
 )
-def create_channel(request: Request, body: ChannelCreateRequest):
+def create_channel(
+    request: Request,
+    body: ChannelCreateRequest,
+    x_license_key: str = Header(default="", alias="X-License-Key"),
+):
+    request_id = base.get_task_id(request)
+    try:
+        quota = billing.channel_quota(x_license_key)
+    except PermissionError as e:
+        raise HttpException(
+            task_id=request_id, status_code=402, message=f"{request_id}: {str(e)}"
+        )
+    if quota and len(scheduler.list_channels()) >= quota:
+        raise HttpException(
+            task_id=request_id,
+            status_code=402,
+            message=f"{request_id}: plan limit reached ({quota} channels) — upgrade your plan",
+        )
     channel = scheduler.add_channel(AutopilotChannel(**body.model_dump()))
     if not scheduler.running and config.app.get("autopilot_enabled", False):
         scheduler.start()

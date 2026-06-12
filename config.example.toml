@@ -352,3 +352,20 @@ upload_post_auto_upload = false
 
 # Start the autopilot scheduler automatically when the API server boots
 autopilot_enabled = false
+
+[stripe]
+########## Billing (Stripe subscriptions)
+# When enabled, autopilot channel creation requires an active license key
+# (X-License-Key header) and per-plan channel limits are enforced.
+# Licenses are issued automatically by the /billing/webhook endpoint when a
+# Stripe Checkout completes. Self-hosters can leave this disabled — nothing
+# changes for them.
+enabled = false
+secret_key = ""
+webhook_secret = ""
+# Stripe Price IDs for the subscription plans
+price_starter = ""
+price_creator = ""
+price_agency = ""
+success_url = "http://localhost:8080/?checkout=success"
+cancel_url = "http://localhost:8080/?checkout=cancel"
