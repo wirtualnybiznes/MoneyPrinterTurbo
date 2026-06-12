@@ -342,3 +342,13 @@ upload_post_platforms = ["tiktok", "instagram"]
 
 # Automatically cross-post videos after generation (if false, you'll need to call the API manually)
 upload_post_auto_upload = false
+
+########## Autopilot (hands-off scheduled content channels)
+# Autopilot turns MoneyPrinterTurbo into a passive content machine:
+# define channels (niche + cadence) via the /autopilot API, and a background
+# scheduler will keep generating fresh videos for each channel automatically.
+# Combine with upload_post_auto_upload = true for fully hands-off publishing.
+# See docs/autopilot.md for the full guide.
+
+# Start the autopilot scheduler automatically when the API server boots
+autopilot_enabled = false

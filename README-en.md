@@ -51,6 +51,8 @@ materials, video subtitles, and video background music before synthesizing a hig
 - [x] Supports **background music**, either random or specified music files, with adjustable `background music volume`
 - [x] Video material sources are **high-definition** and **royalty-free**, and you can also use your own **local materials**
 - [x] Supports integration with various models such as **OpenAI**, **AIHubMix**, **Moonshot**, **Azure**, **gpt4free**, **one-api**, **Qwen**, **Google Gemini**, **Ollama**, **DeepSeek**, **MiniMax**, **ERNIE**, **Pollinations**, **ModelScope** and more
+- [x] Supports **Autopilot channels**: define a niche and a schedule once, and videos are generated (and optionally
+      cross-posted to TikTok/Instagram) automatically — see [docs/autopilot.md](docs/autopilot.md)
 
 ## Video Demos 📺
 
