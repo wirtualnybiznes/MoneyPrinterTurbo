@@ -36,6 +36,19 @@ TikTok/Instagram — with no human in the loop.
 Channels are persisted in `storage/autopilot/channels.json`, so schedules
 survive restarts.
 
+## Install from the published image
+
+The app is published to GitHub Container Registry on every release:
+
+```bash
+docker pull ghcr.io/wirtualnybiznes/moneyprinterturbo:autopilot
+docker run -v $(pwd)/config.toml:/MoneyPrinterTurbo/config.toml \
+           -v $(pwd)/storage:/MoneyPrinterTurbo/storage \
+           -p 8080:8080 \
+           ghcr.io/wirtualnybiznes/moneyprinterturbo:autopilot \
+           python main.py
+```
+
 ## Setup
 
 1. Configure your LLM provider and Pexels/Pixabay keys in `config.toml`
