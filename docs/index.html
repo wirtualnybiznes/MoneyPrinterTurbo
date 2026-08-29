@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MoneyPrinterTurbo — generator filmów Shorts z AI (open source)</title>
+<meta name="description" content="Podaj temat, a MoneyPrinterTurbo napisze scenariusz, dobierze materiały, nagra lektora, doda napisy i muzykę. Open source, uruchamiasz u siebie.">
+<meta name="author" content="MoneyPrinterTurbo">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="canonical" href="https://wirtualnybiznes.github.io/moneyprinterturbo/">
+<meta name="theme-color" content="#2F3F9E" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1016" media="(prefers-color-scheme: dark)">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MoneyPrinterTurbo">
+<meta property="og:locale" content="pl_PL">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:url" content="https://wirtualnybiznes.github.io/moneyprinterturbo/">
+<meta property="og:title" content="MoneyPrinterTurbo — generator filmów Shorts z AI">
+<meta property="og:description" content="Wpisz temat. Odbierz gotowy Short 1080×1920 ze scenariuszem, lektorem, napisami i muzyką. Open source, uruchamiasz na własnym sprzęcie.">
+<meta property="og:image" content="https://wirtualnybiznes.github.io/moneyprinterturbo/webui-en.jpg">
+<meta property="og:image:alt" content="Interfejs WebUI MoneyPrinterTurbo z ustawieniami generowania filmu">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MoneyPrinterTurbo — generator filmów Shorts z AI">
+<meta name="twitter:description" content="Wpisz temat. Odbierz gotowy Short ze scenariuszem, lektorem, napisami i muzyką. Open source.">
+<meta name="twitter:image" content="https://wirtualnybiznes.github.io/moneyprinterturbo/webui-en.jpg">
+
+<link rel="alternate" hreflang="pl" href="https://wirtualnybiznes.github.io/moneyprinterturbo/">
+<link rel="alternate" hreflang="en" href="https://github.com/wirtualnybiznes/moneyprinterturbo/blob/main/README-en.md">
+<link rel="alternate" hreflang="zh" href="https://github.com/wirtualnybiznes/moneyprinterturbo/blob/main/README.md">
+<link rel="alternate" hreflang="ar" href="https://github.com/wirtualnybiznes/moneyprinterturbo/blob/main/README-ar.md">
+<link rel="alternate" hreflang="x-default" href="https://github.com/wirtualnybiznes/moneyprinterturbo">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%232F3F9E'/%3E%3Crect x='6' y='9' width='20' height='5' fill='%23FF5A1F'/%3E%3Crect x='6' y='18' width='13' height='5' fill='%23EDEFF3'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  color-scheme: light;
+  --paper:#EDEFF3;
+  --surface:#FFFFFF;
+  --surface-2:#E3E7EF;
+  --ink:#16181F;
+  --ink-soft:#5A6072;
+  --rule:#C7CCD9;
+  --blue:#2F3F9E;
+  --blue-soft:#E2E6F6;
+  --flo:#FF5A1F;
+  --flo-ink:#FFFFFF;
+  --shadow:#2F3F9E;
+
+  --f-display:"Bricolage Grotesque","Trebuchet MS",Verdana,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",Tahoma,sans-serif;
+  --f-mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+
+  --wrap:1180px;
+  --gap:clamp(1.25rem,3vw,2.25rem);
+  --pad-y:clamp(3.5rem,8vw,6.5rem);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --paper:#0E1016;
+    --surface:#161923;
+    --surface-2:#1D2130;
+    --ink:#E9EBF2;
+    --ink-soft:#99A0B4;
+    --rule:#2C3242;
+    --blue:#8B9AF0;
+    --blue-soft:#1B2136;
+    --flo:#FF6E38;
+    --flo-ink:#16181F;
+    --shadow:#8B9AF0;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --paper:#0E1016;
+  --surface:#161923;
+  --surface-2:#1D2130;
+  --ink:#E9EBF2;
+  --ink-soft:#99A0B4;
+  --rule:#2C3242;
+  --blue:#8B9AF0;
+  --blue-soft:#1B2136;
+  --flo:#FF6E38;
+  --flo-ink:#16181F;
+  --shadow:#8B9AF0;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:clamp(1rem,0.96rem + 0.2vw,1.0625rem);
+  line-height:1.65;
+}
+img{max-width:100%;display:block}
+a{color:var(--blue);text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{color:var(--flo)}
+:focus-visible{outline:3px solid var(--flo);outline-offset:3px}
+
+h1,h2,h3{font-family:var(--f-display);font-weight:800;line-height:1.04;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.6rem,1.6rem + 4.4vw,5rem);letter-spacing:-0.025em}
+h2{font-size:clamp(1.9rem,1.4rem + 2.1vw,3rem);letter-spacing:-0.02em}
+h3{font-size:clamp(1.15rem,1.05rem + 0.5vw,1.4rem);font-weight:600;letter-spacing:-0.01em}
+p{margin:0}
+
+.wrap{width:100%;max-width:var(--wrap);margin-inline:auto;padding-inline:clamp(1.1rem,4vw,2.5rem)}
+.section{padding-block:var(--pad-y);border-top:2px solid var(--blue)}
+.stack{display:flex;flex-direction:column;gap:var(--gap)}
+.stack-tight{display:flex;flex-direction:column;gap:.85rem}
+.measure{max-width:62ch}
+
+.eyebrow{
+  font-family:var(--f-mono);font-size:.75rem;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--blue);
+  display:flex;align-items:center;gap:.6rem;margin:0;
+}
+.eyebrow::before{content:"";width:.7rem;height:.7rem;background:var(--flo);flex:none}
+
+.skip{position:absolute;left:-9999px;top:0;background:var(--flo);color:var(--flo-ink);padding:.7rem 1rem;z-index:99}
+.skip:focus{left:.5rem;top:.5rem}
+
+/* ---------- masthead ---------- */
+.masthead{position:sticky;top:0;z-index:40;background:var(--paper);border-bottom:2px solid var(--blue)}
+.masthead-in{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:3.75rem}
+.brand{display:flex;align-items:center;gap:.6rem;font-family:var(--f-display);font-weight:800;font-size:1.05rem;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+.brand:hover{color:var(--ink)}
+.brand-mark{width:1.35rem;height:1.35rem;background:var(--blue);position:relative;flex:none}
+.brand-mark::after{content:"";position:absolute;inset:.28rem .28rem auto .28rem;height:.24rem;background:var(--flo);box-shadow:0 .42rem 0 var(--paper)}
+.nav{display:none;gap:1.4rem;font-family:var(--f-mono);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase}
+.nav a{color:var(--ink-soft);text-decoration:none}
+.nav a:hover{color:var(--flo)}
+@media (min-width:900px){.nav{display:flex}}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--f-mono);font-size:.82rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  padding:.72rem 1.15rem;border:2px solid var(--blue);background:var(--surface);color:var(--ink);
+  text-decoration:none;transition:transform .12s ease, box-shadow .12s ease;
+  box-shadow:4px 4px 0 var(--shadow);
+}
+.btn:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--shadow);color:var(--ink)}
+.btn-primary{background:var(--flo);border-color:var(--flo);color:var(--flo-ink);box-shadow:4px 4px 0 var(--shadow)}
+.btn-primary:hover{color:var(--flo-ink)}
+.btn-sm{padding:.5rem .85rem;font-size:.74rem;box-shadow:3px 3px 0 var(--shadow)}
+.btn-row{display:flex;flex-wrap:wrap;gap:.9rem}
+
+/* ---------- hero ---------- */
+.hero{padding-block:clamp(3rem,7vw,5.5rem) var(--pad-y)}
+.hero-grid{display:grid;gap:clamp(2rem,5vw,3.5rem);align-items:start}
+@media (min-width:960px){.hero-grid{grid-template-columns:1.15fr .85fr}}
+.hero-lede{font-size:clamp(1.05rem,1rem + 0.45vw,1.3rem);color:var(--ink-soft);max-width:52ch}
+.hero h1 em{
+  font-style:normal;color:var(--blue);white-space:nowrap;
+  background-image:linear-gradient(var(--flo),var(--flo));
+  background-repeat:no-repeat;background-size:100% .13em;background-position:0 92%;
+}
+.hero-note{font-family:var(--f-mono);font-size:.78rem;color:var(--ink-soft);letter-spacing:.03em}
+
+/* preview panel: mock 9:16 render */
+.preview{border:2px solid var(--blue);background:var(--surface);box-shadow:8px 8px 0 var(--shadow)}
+.preview-bar{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.55rem .8rem;border-bottom:2px solid var(--blue);font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+.rec{display:inline-flex;align-items:center;gap:.4rem;color:var(--flo);font-weight:600}
+.rec::before{content:"";width:.5rem;height:.5rem;background:var(--flo);border-radius:50%;animation:blink 1.8s steps(2,end) infinite}
+.preview-body{display:grid;gap:0;padding:.8rem;grid-template-columns:minmax(0,1fr)}
+@media (min-width:420px){.preview-body{grid-template-columns:minmax(0,168px) minmax(0,1fr);gap:.8rem}}
+.frame{
+  aspect-ratio:9/16;background:var(--blue);position:relative;overflow:hidden;
+  background-image:radial-gradient(var(--paper) 1px, transparent 1.4px);
+  background-size:7px 7px;
+}
+.frame-tag{
+  position:absolute;top:.45rem;left:.45rem;right:.45rem;
+  font-family:var(--f-mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--paper);background:var(--blue);padding:.22rem .35rem;
+}
+.caption-strip{position:absolute;left:.45rem;right:.45rem;bottom:1.5rem;background:var(--flo);color:var(--flo-ink);padding:.4rem .5rem;font-weight:600;font-size:.8rem;line-height:1.25;text-align:center}
+.caption-strip span{display:block;animation:swap 12s infinite}
+.caption-strip span:nth-child(2){animation-delay:-8s}
+.caption-strip span:nth-child(3){animation-delay:-4s}
+.caption-strip span:not(:first-child){position:absolute;inset:.4rem .5rem auto .5rem}
+.progress{position:absolute;left:.45rem;right:.45rem;bottom:.7rem;height:.3rem;background:rgba(237,239,243,.35)}
+.progress i{display:block;height:100%;background:var(--paper);width:40%;animation:fill 12s linear infinite}
+.log{font-family:var(--f-mono);font-size:.72rem;line-height:1.75;color:var(--ink-soft);margin:0;padding:.5rem 0 0;list-style:none;display:flex;flex-direction:column;gap:.1rem}
+.log li{display:flex;gap:.5rem;align-items:baseline}
+.log b{color:var(--blue);font-weight:600;flex:none}
+.log .done{color:var(--ink)}
+@media (min-width:420px){.log{padding:0}}
+@keyframes blink{50%{opacity:.15}}
+@keyframes swap{0%,28%{opacity:1}33%,100%{opacity:0}}
+@keyframes fill{from{width:2%}to{width:100%}}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;transition:none !important}
+  .caption-strip span:not(:first-child){display:none}
+  .progress i{width:64%}
+}
+
+/* ---------- facts strip ---------- */
+.facts{border-top:2px solid var(--blue);border-bottom:2px solid var(--blue);background:var(--blue-soft)}
+.facts-in{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0}
+@media (min-width:760px){.facts-in{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.fact{padding:1.15rem 1.1rem;border-right:1px solid var(--rule)}
+.fact:last-child{border-right:0}
+.fact:nth-child(2n){border-right:0}
+@media (min-width:760px){.fact:nth-child(2n){border-right:1px solid var(--rule)}.fact:last-child{border-right:0}}
+.fact-n{font-family:var(--f-display);font-weight:800;font-size:clamp(1.6rem,1.3rem + 1vw,2.2rem);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.fact-l{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-top:.35rem}
+
+/* ---------- pipeline ---------- */
+.pipeline{
+  display:grid;gap:2px;counter-reset:step;list-style:none;margin:0;padding:0;
+  border:2px solid var(--blue);background:var(--blue);
+}
+@media (min-width:620px){.pipeline{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:900px){.pipeline{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1180px){.pipeline{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.step{background:var(--surface);padding:1.35rem 1.15rem;display:flex;flex-direction:column;gap:.5rem}
+.step-n{font-family:var(--f-mono);font-size:.72rem;font-weight:600;letter-spacing:.12em;color:var(--flo)}
+.step-n::before{counter-increment:step;content:counter(step,decimal-leading-zero)}
+.step p{color:var(--ink-soft);font-size:.94rem}
+.step code{font-family:var(--f-mono);font-size:.82em;background:var(--blue-soft);padding:.1em .3em}
+
+/* ---------- cards ---------- */
+.grid-3{display:grid;gap:calc(var(--gap) * 0.9)}
+@media (min-width:680px){.grid-3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1000px){.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.grid-2{display:grid;gap:calc(var(--gap) * 0.9)}
+@media (min-width:820px){.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{
+  background:var(--surface);border:2px solid var(--blue);padding:1.3rem 1.25rem;
+  display:flex;flex-direction:column;gap:.55rem;
+  box-shadow:5px 5px 0 var(--shadow);transition:transform .12s ease, box-shadow .12s ease;
+}
+.card:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--shadow)}
+.card p{color:var(--ink-soft);font-size:.94rem}
+.card-tag{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--flo);font-weight:600}
+
+/* ---------- chips ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;padding:0;margin:0;list-style:none}
+.chips li{font-family:var(--f-mono);font-size:.78rem;border:1.5px solid var(--rule);background:var(--surface);padding:.28rem .55rem;color:var(--ink)}
+.chips li.hot{border-color:var(--flo);color:var(--flo);font-weight:600}
+
+/* ---------- figures ---------- */
+.shots{display:grid;gap:var(--gap)}
+@media (min-width:900px){.shots{grid-template-columns:0.9fr 1.1fr;align-items:start}}
+figure{margin:0;border:2px solid var(--blue);background:var(--surface);box-shadow:6px 6px 0 var(--shadow)}
+figure img{width:100%;height:auto;filter:saturate(.15) contrast(1.03);mix-blend-mode:multiply;transition:filter .25s ease}
+figure:hover img{filter:none}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.88}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.88}
+figcaption{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.06em;color:var(--ink-soft);padding:.6rem .8rem;border-top:2px solid var(--blue)}
+
+/* ---------- code ---------- */
+.code{border:2px solid var(--blue);background:var(--surface);box-shadow:5px 5px 0 var(--shadow);display:flex;flex-direction:column}
+.code-h{font-family:var(--f-mono);font-size:.74rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.55rem .85rem;border-bottom:2px solid var(--blue);color:var(--blue);display:flex;justify-content:space-between;gap:.75rem}
+.code-h span{color:var(--ink-soft);font-weight:400;letter-spacing:.04em;text-transform:none}
+.code pre{
+  margin:0;padding:.9rem .85rem;overflow-x:auto;
+  font-family:var(--f-mono);font-size:.8rem;line-height:1.8;color:var(--ink);
+  white-space:pre-wrap;overflow-wrap:anywhere;
+}
+.code pre b{color:var(--blue);font-weight:500}
+
+/* ---------- table ---------- */
+.table-scroll{overflow-x:auto;border:2px solid var(--blue);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:480px;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-family:var(--f-mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);padding:.7rem .9rem;border-bottom:1px solid var(--rule)}
+th,td{text-align:left;padding:.65rem .9rem;border-bottom:1px solid var(--rule);font-size:.92rem}
+thead th{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--blue);background:var(--blue-soft)}
+tbody tr:last-child td{border-bottom:0}
+tbody th{font-weight:600}
+
+/* ---------- faq ---------- */
+.faq{border-top:2px solid var(--blue)}
+details{border-bottom:2px solid var(--rule);background:transparent}
+summary{
+  cursor:pointer;list-style:none;padding:1.05rem .2rem;
+  font-family:var(--f-display);font-weight:600;font-size:clamp(1.02rem,1rem + .3vw,1.2rem);
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--f-mono);color:var(--flo);font-size:1.3rem;line-height:1;flex:none}
+details[open] summary::after{content:"–"}
+details[open] summary{color:var(--blue)}
+.faq-a{padding:0 .2rem 1.2rem;color:var(--ink-soft);max-width:70ch;display:flex;flex-direction:column;gap:.7rem}
+.faq-a code{font-family:var(--f-mono);font-size:.85em;background:var(--blue-soft);padding:.1em .3em;color:var(--ink)}
+
+/* ---------- cta + footer ---------- */
+.cta{background:var(--blue);color:var(--paper);border-top:2px solid var(--blue)}
+.cta h2{color:var(--paper)}
+.cta p{color:var(--paper);opacity:.85}
+.cta .btn{background:var(--paper);border-color:var(--paper);color:var(--ink);box-shadow:4px 4px 0 var(--flo)}
+.cta .btn:hover{color:var(--ink)}
+.cta .btn-primary{background:var(--flo);border-color:var(--flo);color:var(--flo-ink);box-shadow:4px 4px 0 var(--paper)}
+
+.foot{border-top:2px solid var(--blue);padding-block:2.5rem;font-size:.9rem;color:var(--ink-soft)}
+.foot-grid{display:grid;gap:1.6rem}
+@media (min-width:760px){.foot-grid{grid-template-columns:1.4fr 1fr 1fr}}
+.foot h3{font-family:var(--f-mono);font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+.foot ul{list-style:none;margin:.7rem 0 0;padding:0;display:flex;flex-direction:column;gap:.4rem}
+.foot a{color:var(--ink-soft)}
+.foot a:hover{color:var(--flo)}
+.legal{margin-top:2rem;padding-top:1.2rem;border-top:1px solid var(--rule);font-family:var(--f-mono);font-size:.72rem;letter-spacing:.03em;line-height:1.9}
+</style>
+</head>
+<body>
+<a class="skip" href="#tresc">Przejdź do treści</a>
+
+<header class="masthead">
+  <div class="wrap masthead-in">
+    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span>MoneyPrinterTurbo</a>
+    <nav class="nav" aria-label="Nawigacja główna">
+      <a href="#jak-to-dziala">Jak to działa</a>
+      <a href="#funkcje">Funkcje</a>
+      <a href="#modele">Modele i głosy</a>
+      <a href="#start">Szybki start</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-sm" href="https://github.com/wirtualnybiznes/moneyprinterturbo">GitHub</a>
+  </div>
+</header>
+
+<main id="tresc">
+
+<section class="hero wrap" id="top">
+  <div class="hero-grid">
+    <div class="stack">
+      <p class="eyebrow">Open source · licencja MIT · Python 3.11</p>
+      <h1>Wpisz temat.<br>Odbierz gotowy <em>Short</em>.</h1>
+      <p class="hero-lede">MoneyPrinterTurbo bierze jedno hasło i sam pisze scenariusz, dobiera materiały wideo, nagrywa lektora, wypala napisy i podkłada muzykę. Na wyjściu dostajesz film 1080×1920 gotowy do wrzucenia na TikToka, Reelsy albo Shortsy.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#start">Uruchom u siebie</a>
+        <a class="btn" href="#jak-to-dziala">Zobacz, jak działa</a>
+      </div>
+      <p class="hero-note">Bez abonamentu i bez limitu filmów — płacisz tylko za API modelu, z którego korzystasz. Darmowy lektor Edge TTS działa bez żadnego klucza.</p>
+    </div>
+
+    <div class="preview" aria-label="Podgląd generowanego filmu">
+      <div class="preview-bar">
+        <span class="rec">Render</span>
+        <span>1080×1920 · 9:16</span>
+      </div>
+      <div class="preview-body">
+        <div class="frame">
+          <span class="frame-tag">temat: „zdrowe nawyki”</span>
+          <p class="caption-strip">
+            <span>Pij wodę zaraz po przebudzeniu.</span>
+            <span>Dziesięć minut spaceru to już ruch.</span>
+            <span>Telefon zostaw poza sypialnią.</span>
+          </p>
+          <div class="progress" aria-hidden="true"><i></i></div>
+        </div>
+        <ul class="log">
+          <li><b>01</b><span class="done">scenariusz — gotowy</span></li>
+          <li><b>02</b><span class="done">słowa kluczowe — 5</span></li>
+          <li><b>03</b><span class="done">materiały — 8 klipów</span></li>
+          <li><b>04</b><span class="done">lektor — pl-PL-Zofia</span></li>
+          <li><b>05</b><span class="done">napisy — SRT</span></li>
+          <li><b>06</b>montaż — w toku</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="facts" aria-label="Projekt w liczbach">
+  <div class="wrap facts-in">
+    <div class="fact"><p class="fact-n">19</p><p class="fact-l">dostawców LLM</p></div>
+    <div class="fact"><p class="fact-n">314</p><p class="fact-l">głosów lektora</p></div>
+    <div class="fact"><p class="fact-n">138</p><p class="fact-l">języków i wariantów</p></div>
+    <div class="fact"><p class="fact-n">2</p><p class="fact-l">interfejsy: WebUI i API</p></div>
+  </div>
+</section>
+
+<section class="section" id="jak-to-dziala">
+  <div class="wrap stack">
+    <div class="stack-tight">
+      <p class="eyebrow">Ścieżka produkcji</p>
+      <h2>Sześć kroków od hasła do pliku MP4</h2>
+      <p class="measure" style="color:var(--ink-soft)">Każdy etap możesz zostawić automatowi albo przejąć ręcznie — wkleić własny scenariusz, podrzucić własne klipy, wybrać konkretny głos.</p>
+    </div>
+
+    <ol class="pipeline">
+      <li class="step">
+        <p class="step-n"></p>
+        <h3>Temat</h3>
+        <p>Podajesz hasło w WebUI albo wysyłasz je do API. Możesz też od razu wkleić gotowy tekst.</p>
+      </li>
+      <li class="step">
+        <p class="step-n"></p>
+        <h3>Scenariusz</h3>
+        <p>Wybrany model LLM pisze narrację i wyciąga z niej słowa kluczowe do wyszukiwania materiałów.</p>
+      </li>
+      <li class="step">
+        <p class="step-n"></p>
+        <h3>Materiały</h3>
+        <p>Klipy pobierane są z <code>pexels</code> lub <code>pixabay</code>. Możesz też wskazać własny katalog z plikami.</p>
+      </li>
+      <li class="step">
+        <p class="step-n"></p>
+        <h3>Lektor</h3>
+        <p>Syntezator zamienia tekst na mowę i zwraca znaczniki czasu. Da się też wygenerować film zupełnie bez lektora.</p>
+      </li>
+      <li class="step">
+        <p class="step-n"></p>
+        <h3>Napisy</h3>
+        <p>Plik SRT powstaje ze znaczników Edge TTS albo z lokalnej transkrypcji <code>faster-whisper</code>.</p>
+      </li>
+      <li class="step">
+        <p class="step-n"></p>
+        <h3>Montaż</h3>
+        <p>FFmpeg skleja klipy, wypala napisy, miksuje muzykę i zapisuje gotowy plik — także w kilku wariantach naraz.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="funkcje">
+  <div class="wrap stack">
+    <div class="stack-tight">
+      <p class="eyebrow">Co dostajesz</p>
+      <h2>Kontrola nad każdym elementem filmu</h2>
+    </div>
+
+    <div class="grid-3">
+      <article class="card">
+        <p class="card-tag">Format</p>
+        <h3>Pion i poziom</h3>
+        <p>1080×1920 pod Shortsy, Reelsy i TikToka albo 1920×1080 pod YouTube. Ustawiasz też długość pojedynczego ujęcia, więc sam decydujesz o tempie montażu.</p>
+      </article>
+      <article class="card">
+        <p class="card-tag">Skala</p>
+        <h3>Generowanie wsadowe</h3>
+        <p>Jedno uruchomienie tworzy kilka wersji tego samego tematu. Wybierasz najlepszą, resztę kasujesz — zamiast czekać na kolejne pojedyncze renderowania.</p>
+      </article>
+      <article class="card">
+        <p class="card-tag">Napisy</p>
+        <h3>Pełna typografia</h3>
+        <p>Własna czcionka, pozycja, rozmiar, kolor, obrys i tło napisów — także zaokrąglone, półprzezroczyste podkłady pod tekstem.</p>
+      </article>
+      <article class="card">
+        <p class="card-tag">Dźwięk</p>
+        <h3>Lektor i muzyka</h3>
+        <p>Podgląd głosu przed renderowaniem, regulacja tempa mowy, losowa lub wskazana ścieżka muzyczna z osobno ustawianą głośnością.</p>
+      </article>
+      <article class="card">
+        <p class="card-tag">Materiały</p>
+        <h3>Stock albo własne pliki</h3>
+        <p>Wbudowane wyszukiwanie w bibliotekach Pexels i Pixabay, a jeśli masz swoje ujęcia — wskazujesz katalog i projekt korzysta wyłącznie z nich.</p>
+      </article>
+      <article class="card">
+        <p class="card-tag">Integracja</p>
+        <h3>WebUI i REST API</h3>
+        <p>Klikasz w przeglądarce na porcie 8501 albo wołasz API na 8080 z dokumentacją OpenAPI. Architektura MVC ułatwia wpięcie projektu we własny pipeline.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="modele">
+  <div class="wrap stack">
+    <div class="stack-tight">
+      <p class="eyebrow">Modele i głosy</p>
+      <h2>Podłączasz to, czego już używasz</h2>
+      <p class="measure" style="color:var(--ink-soft)">Dostawcę wybierasz jednym wpisem <code style="font-family:var(--f-mono)">llm_provider</code> w pliku <code style="font-family:var(--f-mono)">config.toml</code>. Reszta pipeline'u pozostaje bez zmian.</p>
+    </div>
+
+    <div class="grid-2">
+      <article class="card">
+        <p class="card-tag">19 dostawców LLM</p>
+        <h3>Scenariusz pisze twój model</h3>
+        <ul class="chips">
+          <li>openai</li><li>gemini</li><li>deepseek</li><li>qwen</li><li>moonshot</li>
+          <li class="hot">ollama</li><li>azure</li><li>grok</li><li>groq</li><li>minimax</li>
+          <li>mimo</li><li>ernie</li><li>modelscope</li><li>cloudflare</li><li>pollinations</li>
+          <li>aihubmix</li><li>oneapi</li><li>litellm</li><li>g4f</li>
+        </ul>
+        <p>Z <code>ollama</code> całość policzy się lokalnie, bez wysyłania czegokolwiek do chmury. Bramki <code>litellm</code>, <code>oneapi</code> i <code>aihubmix</code> dają dostęp do kolejnych modeli pod jednym kluczem.</p>
+      </article>
+
+      <article class="card">
+        <p class="card-tag">Synteza mowy</p>
+        <h3>314 głosów, w tym polskie</h3>
+        <ul class="chips">
+          <li class="hot">pl-PL-ZofiaNeural</li><li class="hot">pl-PL-MarekNeural</li>
+          <li>Edge TTS</li><li>Azure TTS V2</li><li>SiliconFlow</li><li>Gemini TTS</li><li>MiMo TTS</li><li>bez lektora</li>
+        </ul>
+        <p>Domyślny Edge TTS jest darmowy i nie wymaga klucza — w interfejsie widnieje jako „Azure TTS V1”. Płatne Azure TTS V2 brzmi naturalniej i potrzebuje subskrypcji Azure Speech.</p>
+      </article>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <caption>Dwa tryby generowania napisów</caption>
+        <thead>
+          <tr><th scope="col">Tryb</th><th scope="col">Jak działa</th><th scope="col">Szybkość</th><th scope="col">Kiedy wybrać</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">edge</th>
+            <td>Znaczniki czasu prosto z Edge TTS</td>
+            <td>Natychmiast, bez GPU</td>
+            <td>Domyślny wybór — wystarcza do większości nagrań</td>
+          </tr>
+          <tr>
+            <th scope="row">whisper</th>
+            <td>Lokalna transkrypcja <code>faster-whisper</code></td>
+            <td>Od kilku sekund do minuty na klip</td>
+            <td>Gdy napisy rozjeżdżają się przy trudniejszych zdaniach</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="interfejs">
+  <div class="wrap stack">
+    <div class="stack-tight">
+      <p class="eyebrow">Interfejs</p>
+      <h2>Klikasz w przeglądarce albo wołasz z kodu</h2>
+    </div>
+    <div class="shots">
+      <figure>
+        <img src="webui-en.jpg" width="3214" height="3636" loading="lazy" decoding="async" alt="Panel WebUI MoneyPrinterTurbo: pole tematu, wybór modelu, ustawienia głosu, napisów i muzyki">
+        <figcaption>WebUI na porcie 8501 — cały proces bez linii poleceń</figcaption>
+      </figure>
+      <figure>
+        <img src="api.jpg" width="1818" height="1175" loading="lazy" decoding="async" alt="Dokumentacja REST API MoneyPrinterTurbo wygenerowana przez OpenAPI">
+        <figcaption>REST API na porcie 8080 z dokumentacją OpenAPI pod /docs</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="start">
+  <div class="wrap stack">
+    <div class="stack-tight">
+      <p class="eyebrow">Szybki start</p>
+      <h2>Trzy drogi do pierwszego filmu</h2>
+      <p class="measure" style="color:var(--ink-soft)">Zanim uruchomisz projekt, skopiuj <code style="font-family:var(--f-mono)">config.example.toml</code> do <code style="font-family:var(--f-mono)">config.toml</code> i uzupełnij klucz Pexels oraz dane wybranego dostawcy LLM.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="code">
+        <p class="code-h">Docker <span>najmniej zależności</span></p>
+        <pre><code>git clone https://github.com/\
+wirtualnybiznes/moneyprinterturbo.git
+cd moneyprinterturbo
+docker compose up
+
+<b># WebUI  → http://127.0.0.1:8501</b>
+<b># API    → http://127.0.0.1:8080/docs</b></code></pre>
+      </div>
+
+      <div class="code">
+        <p class="code-h">uv <span>macOS i Linux</span></p>
+        <pre><code>uv python install 3.11
+uv sync --frozen
+
+uv run streamlit run ./webui/Main.py \
+  --browser.gatherUsageStats=False
+
+<b># API osobno:</b>
+uv run python main.py</code></pre>
+      </div>
+
+      <div class="code">
+        <p class="code-h">Windows <span>paczka jednym kliknięciem</span></p>
+        <pre><code><b># po rozpakowaniu paczki:</b>
+update.bat   <b># pobiera aktualny kod</b>
+start.bat    <b># otwiera WebUI</b>
+
+<b># dostęp z innego urządzenia w sieci:</b>
+set MPT_WEBUI_HOST=0.0.0.0</code></pre>
+      </div>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <caption>Wymagania sprzętowe</caption>
+        <thead>
+          <tr><th scope="col">Podzespół</th><th scope="col">Minimum</th><th scope="col">Zalecane</th><th scope="col">Komfortowo</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Procesor</th><td>4 rdzenie</td><td>6–8 rdzeni</td><td>8+ rdzeni</td></tr>
+          <tr><th scope="row">Pamięć RAM</th><td>4 GB</td><td>8 GB</td><td>16+ GB</td></tr>
+          <tr><th scope="row">Karta graficzna</th><td>niepotrzebna</td><td>4+ GB VRAM</td><td>8+ GB VRAM</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="hero-note">Przy modelach i głosach z chmury liczy się głównie procesor i łącze. GPU przyspiesza dopiero lokalną transkrypcję <code style="font-family:var(--f-mono)">faster-whisper</code> i generowanie wsadowe.</p>
+  </div>
+</section>
+
+<section class="section faq" id="faq">
+  <div class="wrap stack">
+    <div class="stack-tight">
+      <p class="eyebrow">Najczęstsze pytania</p>
+      <h2>Zanim zaczniesz</h2>
+    </div>
+
+    <div>
+      <details open>
+        <summary>Czy MoneyPrinterTurbo jest darmowy?</summary>
+        <div class="faq-a">
+          <p>Sam projekt tak — kod jest otwarty na licencji MIT i uruchamiasz go na własnym sprzęcie. Płacisz jedynie za usługi zewnętrzne, z których korzystasz: klucz API modelu językowego oraz opcjonalnie płatne głosy Azure TTS V2. Domyślny lektor Edge TTS i wyszukiwanie materiałów w Pexels działają bez opłat.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Czy potrzebuję karty graficznej?</summary>
+        <div class="faq-a">
+          <p>Nie. Projekt działa na samym procesorze — cztery rdzenie i 4 GB RAM wystarczą do pierwszych filmów. GPU przydaje się dopiero przy lokalnej transkrypcji <code>faster-whisper</code> oraz przy generowaniu wielu filmów naraz, gdzie skraca czas renderowania.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Czy filmy mogą być po polsku?</summary>
+        <div class="faq-a">
+          <p>Tak. Scenariusz powstaje w języku, w którym sformułujesz temat, a wśród 314 dostępnych głosów są dwa polskie: <code>pl-PL-ZofiaNeural</code> i <code>pl-PL-MarekNeural</code>. Napisy generują się z tego samego tekstu, więc pozostają zgodne z narracją.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Skąd biorą się materiały wideo i czy mogę ich używać komercyjnie?</summary>
+        <div class="faq-a">
+          <p>Klipy pochodzą z bibliotek Pexels i Pixabay, których licencje dopuszczają szerokie wykorzystanie — warunki zawsze sprawdzaj u źródła, bo to one obowiązują. Zamiast stocku możesz wskazać katalog z własnymi nagraniami.</p>
+          <p>Muzyka dołączona w katalogu <code>resource/songs</code> pochodzi z materiałów YouTube i jest przeznaczona do testów. Do publikacji podłóż własną ścieżkę, do której masz prawa.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Dostaję błąd „No ffmpeg exe could be found”. Co dalej?</summary>
+        <div class="faq-a">
+          <p>Zwykle FFmpeg pobiera się automatycznie. Jeśli środowisko to blokuje, pobierz go ręcznie i wskaż ścieżkę w <code>config.toml</code> w sekcji <code>[app]</code> jako <code>ffmpeg_path</code>. W Windowsie pamiętaj o podwójnych ukośnikach w ścieżce.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Czy muszę instalować ImageMagick?</summary>
+        <div class="faq-a">
+          <p>Nie. Po przejściu na MoviePy 2.x napisy renderuje biblioteka Pillow. Jeżeli wciąż widzisz komunikat o ImageMagicku, pracujesz na starszym kodzie — wykonaj <code>git pull</code> albo uruchom <code>update.bat</code>.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Czy da się używać projektu bez wysyłania danych do chmury?</summary>
+        <div class="faq-a">
+          <p>W dużej mierze tak. Ustaw <code>llm_provider = "ollama"</code>, aby scenariusz powstawał lokalnie, i wybierz <code>subtitle_provider = "whisper"</code>, żeby transkrypcja też liczyła się na twoim sprzęcie. Do sieci wychodzi wtedy jedynie pobieranie materiałów wideo — a i to odpada, gdy korzystasz z własnych plików.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap section" style="border-top:0">
+    <div class="stack">
+      <h2>Sklonuj i wyrenderuj pierwszy film</h2>
+      <p class="measure">Kod, dokumentacja i zgłoszenia błędów są publiczne. Projekt rozwija się dalej — dochodzą kolejni dostawcy modeli, głosy i tłumaczenia interfejsu.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="https://github.com/wirtualnybiznes/moneyprinterturbo">Repozytorium na GitHubie</a>
+        <a class="btn" href="https://colab.research.google.com/github/harry0703/MoneyPrinterTurbo/blob/main/docs/MoneyPrinterTurbo.ipynb">Wypróbuj w Google Colab</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h3>MoneyPrinterTurbo</h3>
+        <p style="margin-top:.7rem;max-width:42ch">Generator krótkich filmów z materiałów stockowych, narracji AI i syntezy mowy. Uruchamiany lokalnie, w Dockerze albo w Colabie.</p>
+      </div>
+      <div>
+        <h3>Dokumentacja</h3>
+        <ul>
+          <li><a href="https://github.com/wirtualnybiznes/moneyprinterturbo/blob/main/README-en.md">README (angielski)</a></li>
+          <li><a href="https://github.com/wirtualnybiznes/moneyprinterturbo/blob/main/README.md">README (chiński)</a></li>
+          <li><a href="https://github.com/wirtualnybiznes/moneyprinterturbo/blob/main/README-ar.md">README (arabski)</a></li>
+          <li><a href="voice-list.txt">Lista wszystkich głosów</a></li>
+          <li><a href="GPU_DOCKER_DEPLOYMENT.md">Wdrożenie z GPU w Dockerze</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Projekt</h3>
+        <ul>
+          <li><a href="https://github.com/wirtualnybiznes/moneyprinterturbo/issues">Zgłoś błąd</a></li>
+          <li><a href="https://github.com/wirtualnybiznes/moneyprinterturbo/blob/main/LICENSE">Licencja MIT</a></li>
+          <li><a href="https://github.com/harry0703/MoneyPrinterTurbo">Projekt źródłowy</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="legal">
+      Oparte na projekcie <a href="https://github.com/harry0703/MoneyPrinterTurbo">harry0703/MoneyPrinterTurbo</a>, licencja MIT.
+      Strona nieoficjalna, prowadzona przy forku repozytorium. Nazwy Pexels, Pixabay, Azure, OpenAI i pozostałych usług należą do ich właścicieli.
+      Przed publikacją filmów sprawdź licencje materiałów i muzyki oraz zasady platformy, na którą je wrzucasz.
+    </p>
+  </div>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "MoneyPrinterTurbo",
+      "applicationCategory": "MultimediaApplication",
+      "applicationSubCategory": "Generator filmów wideo",
+      "operatingSystem": "Windows 10+, macOS 11+, Linux",
+      "softwareVersion": "1.2.9",
+      "url": "https://wirtualnybiznes.github.io/moneyprinterturbo/",
+      "downloadUrl": "https://github.com/wirtualnybiznes/moneyprinterturbo",
+      "codeRepository": "https://github.com/wirtualnybiznes/moneyprinterturbo",
+      "programmingLanguage": "Python",
+      "license": "https://opensource.org/licenses/MIT",
+      "inLanguage": "pl",
+      "description": "Open source'owy generator krótkich filmów. Na podstawie tematu tworzy scenariusz, dobiera materiały wideo, generuje lektora, napisy i podkład muzyczny, a następnie skleja gotowy film 1080×1920 lub 1920×1080.",
+      "featureList": [
+        "Generowanie scenariusza przez model językowy",
+        "Automatyczny dobór materiałów wideo z Pexels i Pixabay",
+        "Synteza mowy w 314 głosach",
+        "Automatyczne napisy SRT (Edge TTS lub faster-whisper)",
+        "Podkład muzyczny z regulacją głośności",
+        "Generowanie wsadowe wielu filmów naraz",
+        "Interfejs WebUI oraz REST API"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "PLN"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "name": "MoneyPrinterTurbo",
+      "url": "https://wirtualnybiznes.github.io/moneyprinterturbo/",
+      "inLanguage": "pl"
+    },
+    {
+      "@type": "FAQPage",
+      "inLanguage": "pl",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Czy MoneyPrinterTurbo jest darmowy?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sam projekt tak — kod jest otwarty na licencji MIT i uruchamiasz go na własnym sprzęcie. Płacisz jedynie za usługi zewnętrzne: klucz API modelu językowego oraz opcjonalnie płatne głosy Azure TTS V2. Domyślny lektor Edge TTS i wyszukiwanie materiałów w Pexels działają bez opłat."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Czy potrzebuję karty graficznej?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nie. Projekt działa na samym procesorze — cztery rdzenie i 4 GB RAM wystarczą do pierwszych filmów. GPU przydaje się dopiero przy lokalnej transkrypcji faster-whisper oraz przy generowaniu wielu filmów naraz."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Czy filmy mogą być po polsku?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tak. Scenariusz powstaje w języku, w którym sformułujesz temat, a wśród 314 dostępnych głosów są dwa polskie: pl-PL-ZofiaNeural i pl-PL-MarekNeural. Napisy generują się z tego samego tekstu, więc pozostają zgodne z narracją."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Skąd biorą się materiały wideo i czy mogę ich używać komercyjnie?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Klipy pochodzą z bibliotek Pexels i Pixabay, których licencje dopuszczają szerokie wykorzystanie — warunki sprawdzaj u źródła. Możesz też wskazać katalog z własnymi nagraniami. Muzyka dołączona w katalogu resource/songs służy do testów; do publikacji podłóż własną ścieżkę."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Dostaję błąd „No ffmpeg exe could be found”. Co dalej?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Zwykle FFmpeg pobiera się automatycznie. Jeśli środowisko to blokuje, pobierz go ręcznie i wskaż ścieżkę w config.toml w sekcji [app] jako ffmpeg_path. W Windowsie pamiętaj o podwójnych ukośnikach."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Czy muszę instalować ImageMagick?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nie. Po przejściu na MoviePy 2.x napisy renderuje biblioteka Pillow. Jeżeli widzisz komunikat o ImageMagicku, pracujesz na starszym kodzie — wykonaj git pull albo uruchom update.bat."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Czy da się używać projektu bez wysyłania danych do chmury?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "W dużej mierze tak. Ustaw llm_provider na ollama, aby scenariusz powstawał lokalnie, i wybierz subtitle_provider whisper, żeby transkrypcja liczyła się na twoim sprzęcie. Do sieci wychodzi wtedy jedynie pobieranie materiałów wideo — a i to odpada przy własnych plikach."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "name": "Jak wygenerować film w MoneyPrinterTurbo",
+      "inLanguage": "pl",
+      "step": [
+        {"@type": "HowToStep", "position": 1, "name": "Temat", "text": "Podaj hasło w WebUI albo wyślij je do API. Możesz też wkleić gotowy tekst."},
+        {"@type": "HowToStep", "position": 2, "name": "Scenariusz", "text": "Model językowy pisze narrację i wyciąga z niej słowa kluczowe."},
+        {"@type": "HowToStep", "position": 3, "name": "Materiały", "text": "Klipy pobierane są z Pexels lub Pixabay albo z własnego katalogu."},
+        {"@type": "HowToStep", "position": 4, "name": "Lektor", "text": "Syntezator mowy zamienia tekst na audio i zwraca znaczniki czasu."},
+        {"@type": "HowToStep", "position": 5, "name": "Napisy", "text": "Plik SRT powstaje ze znaczników Edge TTS albo z transkrypcji faster-whisper."},
+        {"@type": "HowToStep", "position": 6, "name": "Montaż", "text": "FFmpeg skleja klipy, wypala napisy, miksuje muzykę i zapisuje gotowy plik."}
+      ]
+    }
+  ]
+}
+</script>
+</body>
+</html>

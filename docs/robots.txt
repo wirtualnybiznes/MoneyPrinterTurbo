@@ -1,0 +1,7 @@
+# Obowiązuje tylko wtedy, gdy strona jest serwowana z katalogu głównego domeny
+# (np. przy własnej domenie podpiętej do GitHub Pages). Przy adresie projektowym
+# https://<uzytkownik>.github.io/<repo>/ roboty czytają robots.txt z korzenia domeny.
+User-agent: *
+Allow: /
+
+Sitemap: https://wirtualnybiznes.github.io/moneyprinterturbo/sitemap.xml
